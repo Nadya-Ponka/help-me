@@ -38,7 +38,7 @@ module.exports = function count(s, pairs) {
   let counter = 0,j,flag;
   let lengthStr=s.length;
  //   console.log("lengthStr: "+lengthStr);
-
+ if (numberN <6000000) {
   for (let k=1;k<=numberN; k++) {
 	//  console.log("K: "+k);
 	  flag =0;
@@ -51,6 +51,6 @@ module.exports = function count(s, pairs) {
 	}
 	if (flag==(lengthStr)) counter++;
   }
-  
+ }
   return counter;
 }
