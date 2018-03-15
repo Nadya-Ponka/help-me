@@ -36,16 +36,29 @@ module.exports = function count(s, pairs) {
 	let bigFlag=0;
 	k=3;
 	N = lengthStr/2;
+	console.log("pairs: "+pairs);
 
 	let cuttedPairs;
 	cuttedPairs = pairs;
 	cuttedPairs=pairs.shift();
 	
-	pairs.splice(0,0,cuttedPairs);
-	let x,y;
+	while (k<numberN) {
 	
-	counter=604;
-    
+	j=0;
+	flag=0;
+	
+	while (j>=0 )  {
+		if (nod(k,pairs)==0) {j++; k+=2;} else {k+=2; break;}
+		if (j>=N) { if(flag==0) {bigFlag++; flag++; } else {bigFlag+=2;} }
+	}
+	
+	if (flag>0) bigFlag++;
+	}
+
+	counter=bigFlag;
+	pairs.splice(0,0,cuttedPairs);
+	let x;
+	
 	for (i=0; i<pairs.length;i++) {
 		x=powFun(pairs[i][0], (pairs[i][1])-1, 1000000007);
 		counter=modForLong(counter,x,1000000007);
@@ -77,7 +90,7 @@ module.exports = function count(s, pairs) {
  //}
   
   return counter;
-  } 
+  }   
   
   function compareNumeric(a, b) {
 	if (a[0] > b[0]) return 1;
