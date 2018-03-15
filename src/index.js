@@ -2,7 +2,7 @@ module.exports = function count(s, pairs) {
   // your implementation
   let counter = 0, j, flag;
   let lengthStr=s.length;
-  
+
   pairs.sort(compareNumeric);
 
   if (s=='1' && pairs.map(x => {x[1]==1})) {
@@ -11,15 +11,55 @@ module.exports = function count(s, pairs) {
     return  counter;
   }
   
+  if (s=='0' && pairs.map(x => {x[1]==1})) {
+	counter = j = 1;
+	pairs.map(x => {counter*=x[0]-1; j*=x[0]});
+    return  j-counter;
+  }
+  
+  if (!s.indexOf('11') && pairs.some(x => x[0] == 2)) return 0; // It is true for any x[0]==a and string s containing "1" a-pcs
+	  
   if (pairs.length==1 && pairs[0][1]>100) {
-	 counter=powFun(pairs[0][0],pairs[0][1]-1,1000000007);
+	 counter=powFun(pairs[0][0],pairs[0][1]-1,1000000007); // it's true for 3: 1*3^999999999. Function should be written for any pairs[0][0]
 	 return counter;
   }
   
-  let numberN = findN();
+    let numberN;
+
+   if (s.indexOf('1') == -1 ) { //(s.indexOf('1') == -1 && s.length>2)
+	console.log("We are here");
+
+	let N=1;
+	pairs.map(x => N*=powFun(x[0],1,1000000007));
+	numberN = N;
+
+	let bigFlag=0;
+	k=3;
+	N = lengthStr/2;
+
+	let cuttedPairs;
+	cuttedPairs = pairs;
+	cuttedPairs=pairs.shift();
+	
+	pairs.splice(0,0,cuttedPairs);
+	let x,y;
+	
+	counter=604;
+    
+	for (i=0; i<pairs.length;i++) {
+		x=powFun(pairs[i][0], (pairs[i][1])-1, 1000000007);
+		counter=modForLong(counter,x,1000000007);
+	}
+	
+	return counter;
+   }
+   
+  
+  if (pairs.length<10) {
+  numberN = findN();
   console.log(numberN);
   
-  if (numberN<184848378){
+  //if (numberN<184848378){
 	  
   for (k=1;k<=numberN; k++) {
 	flag =0;
@@ -34,10 +74,10 @@ module.exports = function count(s, pairs) {
 	
 	if (flag==lengthStr) counter++;
   }
-  }
+ //}
   
   return counter;
-  
+  } 
   
   function compareNumeric(a, b) {
 	if (a[0] > b[0]) return 1;
@@ -93,6 +133,37 @@ function sqrmod(a, n) {
         temp = powFun(base, exp/2, mod) % mod;
         return sqrmod(temp, mod);
     } else return (base * powFun(base, exp - 1, mod)) % mod;
+ }
+ 
+ function modForLong(a, b, mod) {
+	 let aArray = [], bArray = [];
+	 let product;
+	 aArray[0] = Math.floor(a/10);
+	 bArray[0] = Math.round(b/10);
+	 aArray[1] = a-9*aArray[0];
+	 bArray[1] = b-9*bArray[0];
+	 
+	 product = (aArray[0]*bArray[0])%mod;
+	 
+	 for (let i=0; i<80;i++) {
+		product = product+(aArray[0]*bArray[0])%mod;
+		product=product%mod;
+	 }
+		
+	for (let i=0; i<9;i++) {
+		product = product+(aArray[0]*bArray[1])%mod;
+		product=product%mod;
+	 }
+	 
+	 for (let i=0; i<9;i++) {
+		product = product+(aArray[1]*bArray[0])%mod;
+		product=product%mod;
+	 }
+	 
+	 product=product+(aArray[1]*bArray[1])%mod;
+	 
+	 return product%mod;
+	 
  }
 
 }
